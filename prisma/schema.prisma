@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String?
+  email         String         @unique
+  password      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  role          Role          @default(USER)
+  devices       Device[]      // Relation to devices they manage
+  alerts        Alert[]       // Relation to alerts they've received
+  dashboards    Dashboard[]   // Custom dashboards
+}
+
+model Device {
+  id            String         @id @default(cuid())
+  name          String
+  ipAddress     String
+  macAddress    String         @unique
+  type          DeviceType    @default(OTHER)
+  manufacturer  String?
+  model         String?
+  lastSeen      DateTime
+  status        DeviceStatus  @default(OFFLINE)
+  metadata      Json?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  location      String?       // Physical location in the network
+  parent        Device?       @relation("DeviceHierarchy", fields: [parentId], references: [id])
+  parentId      String?
+  children      Device[]      @relation("DeviceHierarchy")
+  managedBy     User[]        // Many-to-many with users
+  metrics       NetworkMetrics[]
+  alerts        Alert[]
+  configurations DeviceConfig[]
+}
+
+model NetworkMetrics {
+  id            String    @id @default(cuid())
+  device        Device    @relation(fields: [deviceId], references: [id])
+  deviceId      String
+  timestamp     DateTime
+  bandwidth     Json      // Upload/download speeds
+  latency       Float
+  packetLoss    Float?
+  jitter        Float?    // Network jitter measurement
+  signalStrength Float?   // For wireless devices
+  connections   Int?      // Number of active connections
+  createdAt     DateTime  @default(now())
+
+  @@index([deviceId, timestamp])
+}
+
+model DeviceConfig {
+  id            String    @id @default(cuid())
+  device        Device    @relation(fields: [deviceId], references: [id])
+  deviceId      String
+  type          String    // e.g., "network", "security", "performance"
+  config        Json      // Configuration data
+  version       Int       @default(1)
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([deviceId, type])
+}
+
+model Alert {
+  id            String    @id @default(cuid())
+  title         String
+  message       String
+  severity      Severity  @default(INFO)
+  status        AlertStatus @default(OPEN)
+  device        Device    @relation(fields: [deviceId], references: [id])
+  deviceId      String
+  user          User      @relation(fields: [userId], references: [id])
+  userId        String
+  config        AlertConfig? @relation(fields: [configId], references: [id])
+  configId      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  resolvedAt    DateTime?
+
+  @@index([deviceId, status])
+  @@index([userId, status])
+}
+
+model AlertConfig {
+  id            String    @id @default(cuid())
+  name          String
+  type          String
+  condition     Json      // Alert conditions
+  severity      Severity  @default(WARNING)
+  enabled       Boolean   @default(true)
+  alerts        Alert[]   // Related alerts
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Dashboard {
+  id            String    @id @default(cuid())
+  name          String
+  layout        Json      // Dashboard widget layout
+  widgets       Json      // Widget configurations
+  user          User      @relation(fields: [userId], references: [id])
+  userId        String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+enum Role {
+  USER
+  ADMIN
+  VIEWER
+}
+
+enum DeviceType {
+  ROUTER
+  SWITCH
+  AP          // Access Point
+  IOT         // IoT Device
+  COMPUTER
+  MOBILE
+  SERVER
+  OTHER
+}
+
+enum DeviceStatus {
+  ONLINE
+  OFFLINE
+  WARNING
+  ERROR
+  MAINTENANCE
+}
+
+enum Severity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}
+
+enum AlertStatus {
+  OPEN
+  ACKNOWLEDGED
+  RESOLVED
+  IGNORED
+}

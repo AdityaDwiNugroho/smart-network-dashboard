@@ -1,27 +1,121 @@
 {
-  "name": "smart-home-dashboard",
-  "version": "0.1.0",
+  "name": "smart-network-dashboard",
+  "version": "1.0.0",
+  "description": "A comprehensive web-based dashboard for managing OpenWrt routers and IoT devices in your smart home network",
   "private": true,
+  "author": {
+    "name": "Aditya Dwi Nugroho",
+    "url": "https://github.com/AdityaDwiNugroho"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AdityaDwiNugroho/smart-network-dashboard.git"
+  },
+  "homepage": "https://github.com/AdityaDwiNugroho/smart-network-dashboard#readme",
+  "bugs": {
+    "url": "https://github.com/AdityaDwiNugroho/smart-network-dashboard/issues"
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://teer.id/adityadwinugroho"
+  },
+  "keywords": [
+    "smart-home",
+    "network-management",
+    "openwrt",
+    "iot",
+    "router-management",
+    "network-monitoring",
+    "dashboard",
+    "nextjs",
+    "typescript",
+    "real-time"
+  ],
+  "license": "MIT",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf .next out",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "prisma:reset": "prisma migrate reset",
+    "db:seed": "tsx prisma/seed.ts",
+    "env:setup": "cp .env.example .env.local",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.4.5"
+    "@prisma/client": "^5.7.1",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.12",
+    "@tremor/react": "^3.12.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/d3": "^7.4.3",
+    "@types/ws": "^8.18.1",
+    "bcryptjs": "^2.4.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "d3": "^7.9.0",
+    "influx": "^5.10.0",
+    "ioredis": "^5.3.2",
+    "lucide-react": "^0.535.0",
+    "net-snmp": "^3.23.0",
+    "next": "^14.0.4",
+    "next-auth": "^4.24.5",
+    "node-cron": "^4.2.1",
+    "ping": "^0.4.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^3.1.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "ssh2": "^1.16.0",
+    "tailwind-merge": "^3.3.1",
+    "ws": "^8.18.3",
+    "zod": "^3.22.4",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "15.4.5",
-    "@eslint/eslintrc": "^3"
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "@types/ssh2": "^1.15.5",
+    "autoprefixer": "^10.4.21",
+    "css-loader": "^7.1.2",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.0.4",
+    "postcss": "^8.5.6",
+    "postcss-loader": "^8.1.1",
+    "prettier": "^3.1.1",
+    "prettier-plugin-tailwindcss": "^0.5.9",
+    "prisma": "^5.7.1",
+    "style-loader": "^4.0.0",
+    "tailwindcss": "^4.1.11",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
