@@ -45,3 +45,4 @@ next-env.d.ts
 
 # ignore all .git directories workflow
 .git
+.github
