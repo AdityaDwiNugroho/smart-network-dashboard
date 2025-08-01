@@ -2,7 +2,7 @@
 
 A comprehensive web-based dashboard for managing OpenWrt routers and IoT devices in your smart home network. Built with modern technologies to provide real-time monitoring, device management, and network analytics.
 
-![Dashboard Preview](https://via.placeholder.com/800x400/1e293b/ffffff?text=Smart+Home+Dashboard)
+![Dashboard Preview](/data/screenshots/image.png)
 
 ## 🚀 Features
 
